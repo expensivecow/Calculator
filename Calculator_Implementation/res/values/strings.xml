@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Calculator_Implementation</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="addoperator">+</string>
+    <string name="suboperator">-</string>
+    <string name="muloperator">x</string>
+    <string name="divoperator">/</string>
+    <string name="initialvalue">0</string>
+
+</resources>
