@@ -144,7 +144,7 @@
         android:layout_alignBottom="@+id/bDecimal"
         android:layout_alignLeft="@+id/bDiv"
         android:layout_below="@+id/bSix"
-        android:text="@string/equal" />
+        android:text="@string/equaloperator" />
 
     <TextView
         android:id="@+id/DisplayArray"
@@ -179,7 +179,7 @@
         android:layout_height="50dp"
         android:layout_alignLeft="@+id/bDiv"
         android:layout_below="@+id/bDiv"
-        android:text="@string/clear" />
+        android:text="@string/clearoperator" />
 
     <Button
         android:id="@+id/bDel"
@@ -188,6 +188,6 @@
         android:layout_height="50dp"
         android:layout_alignLeft="@+id/bClear"
         android:layout_below="@+id/bClear"
-        android:text="@string/delete" />
+        android:text="@string/deleteoperator" />
 
 </RelativeLayout>

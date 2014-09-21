@@ -361,12 +361,12 @@ int string abc_shareactionprovider_share_with_application 0x7f0a000b
 int string action_settings 0x7f0a000f
 int string addoperator 0x7f0a0010
 int string app_name 0x7f0a000d
-int string clear 0x7f0a0023
+int string clearoperator 0x7f0a0023
 int string decimal 0x7f0a001e
-int string delete 0x7f0a0022
+int string deleteoperator 0x7f0a0022
 int string divoperator 0x7f0a0013
 int string eight 0x7f0a001c
-int string equal 0x7f0a0021
+int string equaloperator 0x7f0a0021
 int string five 0x7f0a0019
 int string four 0x7f0a0018
 int string hello_world 0x7f0a000e

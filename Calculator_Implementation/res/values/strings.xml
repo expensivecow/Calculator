@@ -21,8 +21,8 @@
     <string name="decimal">.</string><string name="zero">0</string>
     
     <string name="negative">-</string>
-    <string name="equal">=</string>
-    <string name="delete">DEL</string>
-    <string name="clear">CE</string>
+    <string name="equaloperator">=</string>
+    <string name="deleteoperator">DEL</string>
+    <string name="clearoperator">CE</string>
 
 </resources>

@@ -1263,12 +1263,12 @@ containing a value of this type.
         public static final int action_settings=0x7f0a000f;
         public static final int addoperator=0x7f0a0010;
         public static final int app_name=0x7f0a000d;
-        public static final int clear=0x7f0a0023;
+        public static final int clearoperator=0x7f0a0023;
         public static final int decimal=0x7f0a001e;
-        public static final int delete=0x7f0a0022;
+        public static final int deleteoperator=0x7f0a0022;
         public static final int divoperator=0x7f0a0013;
         public static final int eight=0x7f0a001c;
-        public static final int equal=0x7f0a0021;
+        public static final int equaloperator=0x7f0a0021;
         public static final int five=0x7f0a0019;
         public static final int four=0x7f0a0018;
         public static final int hello_world=0x7f0a000e;
