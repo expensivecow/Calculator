@@ -1,0 +1,16 @@
+package com.example.calculator_implementation;
+
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import org.junit.Test;
+
+import junit.framework.TestCase;
+
+public class MainActivityTest extends TestCase {
+
+	@Test
+	public void isEmptyDisplay() {
+		MainActivity List = MainActivity();
+	}
+}

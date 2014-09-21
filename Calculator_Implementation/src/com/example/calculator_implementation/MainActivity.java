@@ -8,12 +8,44 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Iterator;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class MainActivity extends ActionBarActivity {
 	/* Is Called when the activity is first created*/
-	Button add, sub, mul, div;
-	TextView display;
+	Button add, sub, mul, div, zero, one, two, three, four, five, six, seven, eight, nine, equal, negative, decimal, clear, delete;
+	TextView display, displayarray;
 	String result;
+	String plusOperator = "+";
+	String subOperator = "-";
+	String mulOperator = "x";
+	String divOperator = "/";
+	
+	Queue<String> DisplayList;	//using a linked blocking queue b/c its unbound + FIFO
+	
+	public MainActivity() {
+		this.DisplayList = new LinkedBlockingQueue<String>();
+	}
+	
+	//Used to display items that were punched into the calculator
+	public void Display_Items(Queue<String> DisplayList) {
+		if(DisplayList.isEmpty()) {
+			displayarray.setText("0");
+			display.setText("0");
+		} else {
+			String Printstring = new String();
+			displayarray.setText(DisplayList.toString());
+			
+			//use an iterator to read all values in the queue
+			Iterator<String> readall = DisplayList.iterator();
+			while(readall.hasNext()) {
+				Printstring = Printstring + (String)readall.next();
+			}
+			display.setText(Printstring);
+		}
+		return;
+	}
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,39 +53,164 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
   
         //Making my buttons and declaring my display
+        display = (TextView) findViewById(R.id.DisplayResult);
+        displayarray = (TextView) findViewById(R.id.DisplayArray);
         add = (Button) findViewById(R.id.bAdd);
         sub = (Button) findViewById(R.id.bSub);
         mul = (Button) findViewById(R.id.bMul);
         div = (Button) findViewById(R.id.bDiv);
-        display = (TextView) findViewById(R.id.DisplayResult);
+        zero = (Button) findViewById(R.id.bZero);
+        one = (Button) findViewById(R.id.bOne);
+        two = (Button) findViewById(R.id.bTwo);
+        three = (Button) findViewById(R.id.bThree);
+        four = (Button) findViewById(R.id.bFour);
+        five = (Button) findViewById(R.id.bFive);
+        six = (Button) findViewById(R.id.bSix);
+        seven = (Button) findViewById(R.id.bSeven);
+        eight = (Button) findViewById(R.id.bEight);
+        nine = (Button) findViewById(R.id.bNine);
+        equal = (Button) findViewById(R.id.bEqual);
+        decimal = (Button) findViewById(R.id.bDecimal);
+        negative = (Button) findViewById(R.id.bNegative);
+        clear = (Button) findViewById(R.id.bClear);
+        delete = (Button) findViewById(R.id.bDel);
         
-        add.setOnClickListener(new View.OnClickListener() {
+       add.setOnClickListener(new View.OnClickListener() {
         	
         	public void onClick(View v) {
-        		//TODO:implement this
+        		DisplayList.add(plusOperator);
+        		Display_Items(DisplayList);
         	}
         });
         
        sub.setOnClickListener(new View.OnClickListener() {
         	
         	public void onClick(View v) {
-        		//TODO:implement this
+        		DisplayList.add(subOperator);
+        		Display_Items(DisplayList);
         	}
         });
     
        mul.setOnClickListener(new View.OnClickListener() {
        	
        	public void onClick(View v) {
-       		//TODO:implement this
+    		DisplayList.add(mulOperator);
+    		Display_Items(DisplayList);
        	}
        });
        
        div.setOnClickListener(new View.OnClickListener() {
        	
        	public void onClick(View v) {
-       		//TODO:implement this
+    		DisplayList.add(divOperator);
+    		Display_Items(DisplayList);
        	}
        });
+       
+       equal.setOnClickListener(new View.OnClickListener() {
+       	
+       	public void onClick(View v) {
+       		//TODO: implement this
+       	}
+       });
+       
+      negative.setOnClickListener(new View.OnClickListener() {
+       	
+       	public void onClick(View v) {
+       		//TODO: implement this
+       	}
+       });
+      
+      decimal.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		//TODO: implement this
+      	}
+      });
+      
+      zero.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		//TODO: implement this
+      	}
+      });
+      
+      one.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		//TODO: implement this
+      	}
+      });
+      
+      two.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		//TODO: implement this
+      	}
+      });
+      
+      three.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		//TODO: implement this
+      	}
+      });
+      
+      four.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		//TODO: implement this
+      	}
+      });
+      
+      five.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		//TODO: implement this
+      	}
+      });
+      
+      six.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		//TODO: implement this
+      	}
+      });
+      
+      seven.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		//TODO: implement this
+      	}
+      });
+      
+      eight.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		//TODO: implement this
+      	}
+      });
+      
+      nine.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		//TODO: implement this
+      	}
+      });
+      
+      clear.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		//TODO: implement this
+      	}
+      });
+      
+      delete.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		//TODO: implement this
+      	}
+      });
     }
 
 
