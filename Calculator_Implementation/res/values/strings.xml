@@ -18,11 +18,14 @@
     <string name="seven">7</string>
     <string name="eight">8</string>
     <string name="nine">9</string>
+    <string name="Operators">Operator Queue</string>
     <string name="decimal">.</string><string name="zero">0</string>
     
     <string name="negative">-</string>
     <string name="equaloperator">=</string>
     <string name="deleteoperator">DEL</string>
     <string name="clearoperator">CE</string>
+    <string name="DisplayArray">Display Array</string>
+    <string name="NumberList">Numbers Array</string>
 
 </resources>

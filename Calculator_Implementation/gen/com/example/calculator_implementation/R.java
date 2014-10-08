@@ -1081,6 +1081,7 @@ containing a value of this type.
     }
     public static final class id {
         public static final int DisplayArray=0x7f05004d;
+        public static final int DisplayOperators=0x7f050051;
         public static final int DisplayResult=0x7f05003c;
         public static final int action_bar=0x7f05001c;
         public static final int action_bar_activity_content=0x7f050015;
@@ -1093,7 +1094,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f050016;
         public static final int action_menu_presenter=0x7f050017;
         public static final int action_mode_close_button=0x7f050024;
-        public static final int action_settings=0x7f050051;
+        public static final int action_settings=0x7f050052;
         public static final int activity_chooser_view_content=0x7f050025;
         public static final int always=0x7f05000b;
         public static final int bAdd=0x7f05003f;
@@ -1220,6 +1221,9 @@ containing a value of this type.
         public static final int main=0x7f0c0000;
     }
     public static final class string {
+        public static final int DisplayArray=0x7f0a0025;
+        public static final int NumberList=0x7f0a0026;
+        public static final int Operators=0x7f0a001e;
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
          */
         public static final int abc_action_bar_home_description=0x7f0a0001;
@@ -1263,18 +1267,18 @@ containing a value of this type.
         public static final int action_settings=0x7f0a000f;
         public static final int addoperator=0x7f0a0010;
         public static final int app_name=0x7f0a000d;
-        public static final int clearoperator=0x7f0a0023;
-        public static final int decimal=0x7f0a001e;
-        public static final int deleteoperator=0x7f0a0022;
+        public static final int clearoperator=0x7f0a0024;
+        public static final int decimal=0x7f0a001f;
+        public static final int deleteoperator=0x7f0a0023;
         public static final int divoperator=0x7f0a0013;
         public static final int eight=0x7f0a001c;
-        public static final int equaloperator=0x7f0a0021;
+        public static final int equaloperator=0x7f0a0022;
         public static final int five=0x7f0a0019;
         public static final int four=0x7f0a0018;
         public static final int hello_world=0x7f0a000e;
         public static final int initialvalue=0x7f0a0014;
         public static final int muloperator=0x7f0a0012;
-        public static final int negative=0x7f0a0020;
+        public static final int negative=0x7f0a0021;
         public static final int nine=0x7f0a001d;
         public static final int one=0x7f0a0015;
         public static final int seven=0x7f0a001b;
@@ -1282,7 +1286,7 @@ containing a value of this type.
         public static final int suboperator=0x7f0a0011;
         public static final int three=0x7f0a0017;
         public static final int two=0x7f0a0016;
-        public static final int zero=0x7f0a001f;
+        public static final int zero=0x7f0a0020;
     }
     public static final class style {
         /** 

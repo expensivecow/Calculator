@@ -7,7 +7,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.calculator_implementation.MainActivity" >
-
+    
     <TextView
         android:id="@+id/DisplayResult"
         android:layout_alignParentTop="true"
@@ -153,7 +153,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/DisplayResult"
         android:layout_marginTop="32dp"
-        android:text="@string/hello_world"
+        android:text="@string/DisplayArray"
         android:textColor="#FF0000" />
 
     <Button
@@ -189,5 +189,14 @@
         android:layout_alignLeft="@+id/bClear"
         android:layout_below="@+id/bClear"
         android:text="@string/deleteoperator" />
+
+    <TextView
+        android:id="@+id/DisplayOperators"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/DisplayResult"
+        android:layout_below="@+id/DisplayArray"
+        android:textColor="#00CC00"
+        android:text="@string/NumberList" />
 
 </RelativeLayout>
