@@ -27,5 +27,6 @@
     <string name="clearoperator">CE</string>
     <string name="DisplayArray">Display Array</string>
     <string name="NumberList">Numbers Array</string>
+    <string name="DisplayOperator">Display Operator Array</string>
 
 </resources>

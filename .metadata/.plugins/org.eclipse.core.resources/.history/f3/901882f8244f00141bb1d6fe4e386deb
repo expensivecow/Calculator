@@ -1,0 +1,312 @@
+package com.example.calculator_implementation;
+
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.Iterator;
+import java.util.Queue;
+import java.util.Stack;
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class MainActivity extends ActionBarActivity {
+	/* Is Called when the activity is first created*/
+	Button add, sub, mul, div, zero, one, two, three, four, five, six, seven, eight, nine, negative, decimal, clear, delete, equal;
+	TextView display, displayarray, displaynumber;
+	String result;
+	String numDivider = "|", plusOperator = "+", subOperator = "-", mulOperator = "x", divOperator = "/", numOne = "1", numTwo = "2", numThree = "3", numFour = "4", numZero = "0", numFive = "5", numSix = "6", numSeven = "7", numEight = "8", numNine = "9", equalOperator = "=", decimalOperator = ".";
+
+	Queue<String> DisplayList;	//using a linked blocking queue b/c its unbound + FIFO
+	Queue<String> NumberList; //used to hold all operands
+	
+	public MainActivity() {
+		this.DisplayList = new LinkedBlockingQueue<String>();
+		this.NumberList = new LinkedBlockingQueue<String>();
+	}
+	
+	//Used to display items that were punched into the calculator (Operators and numbers)
+	public void Display_Items(Queue<String> DisplayList) {
+		if(DisplayList.isEmpty()) {
+			displayarray.setText("0");
+			display.setText("0");
+		} else {
+			String Printstring = new String();
+			displayarray.setText(DisplayList.toString());
+			
+			//use an iterator to read all values in the queue
+			Iterator<String> readall = DisplayList.iterator();
+			while(readall.hasNext()) {
+				Printstring = Printstring + (String)readall.next();
+			}
+			display.setText(Printstring);
+		}
+		return;
+	}
+	
+	//Used to display numbers that were punched into the calculator on a seperate list
+	public void Display_NumItems(Queue<String> NumberList) {
+		if(NumberList.isEmpty()) {
+			displaynumber.setText("0");
+		} else {
+			String Printstring = new String();
+			displaynumber.setText(NumberList.toString());
+			
+			//use an iterator to read all values in the queue
+			Iterator<String> readall = NumberList.iterator();
+			while(readall.hasNext()) {
+				Printstring = Printstring + (String)readall.next();
+			}
+			displaynumber.setText(Printstring);
+		}
+		return;
+	}
+	
+	//Precondition: takes in a queue that is full of strings
+	//Postcondition: returns a queue with the last element removed
+	public Queue<String> rEndofDisplayQueue(Queue<String> DisplayQueue) {
+		LinkedBlockingQueue<String> ReturnQueue = new LinkedBlockingQueue<String>();
+		if(DisplayQueue.isEmpty() == true) {
+			return DisplayQueue;
+		}
+		else {
+			String temp = DisplayQueue.poll();
+			while(DisplayQueue.peek() != null) {
+				ReturnQueue.add(temp);
+				temp = DisplayQueue.poll();
+			}
+			return ReturnQueue;
+		}
+	}
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+  
+        //Making my buttons and declaring my display
+        display = (TextView) findViewById(R.id.DisplayResult);
+        displaynumber = (TextView) findViewById(R.id.DisplayNumbers);
+        displayarray = (TextView) findViewById(R.id.DisplayArray);
+        add = (Button) findViewById(R.id.bAdd);
+        sub = (Button) findViewById(R.id.bSub);
+        mul = (Button) findViewById(R.id.bMul);
+        div = (Button) findViewById(R.id.bDiv);
+        zero = (Button) findViewById(R.id.bZero);
+        one = (Button) findViewById(R.id.bOne);
+        two = (Button) findViewById(R.id.bTwo);
+        three = (Button) findViewById(R.id.bThree);
+        four = (Button) findViewById(R.id.bFour);
+        five = (Button) findViewById(R.id.bFive);
+        six = (Button) findViewById(R.id.bSix);
+        seven = (Button) findViewById(R.id.bSeven);
+        eight = (Button) findViewById(R.id.bEight);
+        nine = (Button) findViewById(R.id.bNine);
+        equal = (Button) findViewById(R.id.bEqual);
+        decimal = (Button) findViewById(R.id.bDecimal);
+        negative = (Button) findViewById(R.id.bNegative);
+        clear = (Button) findViewById(R.id.bClear);
+        delete = (Button) findViewById(R.id.bDel);
+        
+       add.setOnClickListener(new View.OnClickListener() {
+        	
+        	public void onClick(View v) {
+        		DisplayList.add(plusOperator);
+        		Display_Items(DisplayList);
+        	}
+        });
+        
+       sub.setOnClickListener(new View.OnClickListener() {
+        	
+        	public void onClick(View v) {
+        		DisplayList.add(subOperator);
+        		Display_Items(DisplayList);
+        	}
+        });
+    
+       mul.setOnClickListener(new View.OnClickListener() {
+       	
+       	public void onClick(View v) {
+    		DisplayList.add(mulOperator);
+    		Display_Items(DisplayList);
+       	}
+       });
+       
+       div.setOnClickListener(new View.OnClickListener() {
+       	
+       	public void onClick(View v) {
+    		DisplayList.add(divOperator);
+    		Display_Items(DisplayList);
+       	}
+       });
+       
+       equal.setOnClickListener(new View.OnClickListener() {
+       	
+       	public void onClick(View v) {
+       		//TODO: write an evaluate function for this part
+       	}
+       });
+       
+      negative.setOnClickListener(new View.OnClickListener() {
+       	
+       	public void onClick(View v) {
+       		//TODO: implement this
+       	}
+       });
+      
+      decimal.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		DisplayList.add(decimalOperator);
+      		Display_Items(DisplayList);
+      	}
+      });
+      
+      zero.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numZero);
+    		NumberList.add(numZero);
+    		Display_Items(DisplayList);
+      	}
+      });
+      
+      one.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numOne);
+    		NumberList.add(numOne);
+    		Display_Items(DisplayList);
+    		Display_NumItems(NumberList);
+      	}
+      });
+      
+      two.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numTwo);
+    		NumberList.add(numTwo);
+    		Display_Items(DisplayList);
+    		Display_NumItems(NumberList);
+      	}
+      });
+      
+      three.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numThree);
+    		NumberList.add(numThree);
+    		Display_Items(DisplayList);
+    		Display_NumItems(NumberList);
+      	}
+      });
+      
+      four.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numFour);
+    		NumberList.add(numFour);
+    		Display_Items(DisplayList);
+    		Display_NumItems(NumberList);
+      	}
+      });
+      
+      five.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numFive);
+    		NumberList.add(numFive);
+    		Display_Items(DisplayList);
+    		Display_NumItems(NumberList);
+      	}
+      });
+      
+      six.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numSix);
+    		NumberList.add(numSix);
+    		Display_Items(DisplayList);
+    		Display_NumItems(NumberList);
+      	}
+      });
+      
+      seven.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numSeven);
+    		NumberList.add(numSeven);
+    		Display_Items(DisplayList);
+    		Display_NumItems(NumberList);
+      	}
+      });
+      
+      eight.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numEight);
+    		NumberList.add(numEight);
+    		Display_Items(DisplayList);
+    		Display_NumItems(NumberList);
+      	}
+      });
+      
+      nine.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numNine);
+    		NumberList.add(numNine);
+    		Display_Items(DisplayList);
+    		Display_NumItems(NumberList);
+      	}
+      });
+      
+      clear.setOnClickListener(new View.OnClickListener() {
+      	
+    	/*
+    	 * Precondition: NumberList, DisplayList exist as queues
+    	 * Postcondition: NumberList DisplayList are cleared and Display is shown to look 'reset'
+    	 */
+      	public void onClick(View v) {
+      		DisplayList.clear();
+      		NumberList.clear();
+      		Display_Items(DisplayList);
+      		//TODO: will have to clear all other arrays/stacks/queues used in the near future
+      	}
+      });
+      
+      delete.setOnClickListener(new View.OnClickListener() {
+      	
+    	//Precondition: button is just pressed
+    	//Postcondition: DisplayQueue has 1 item removed at the end
+    	//               
+      	public void onClick(View v) {
+      		DisplayList = rEndofDisplayQueue(DisplayList);
+      		Display_Items(DisplayList);
+      	}
+      });
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}

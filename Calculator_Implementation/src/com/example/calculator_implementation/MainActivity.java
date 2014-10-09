@@ -1,3 +1,4 @@
+//NOTE TO SELF: Implemented displaying numbers on 1 array, need to add dividers when add, sub, divide, or mul operators pressed.
 package com.example.calculator_implementation;
 
 import android.support.v7.app.ActionBarActivity;
@@ -16,19 +17,21 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class MainActivity extends ActionBarActivity {
 	/* Is Called when the activity is first created*/
 	Button add, sub, mul, div, zero, one, two, three, four, five, six, seven, eight, nine, negative, decimal, clear, delete, equal;
-	TextView display, displayarray;
+	TextView display, displayarray, displaynumber, displayoperator;
 	String result;
-	String plusOperator = "+", subOperator = "-", mulOperator = "x", divOperator = "/", numOne = "1", numTwo = "2", numThree = "3", numFour = "4", numZero = "0", numFive = "5", numSix = "6", numSeven = "7", numEight = "8", numNine = "9", equalOperator = "=", decimalOperator = ".";
+	String numDivider = "|", plusOperator = "+", subOperator = "-", mulOperator = "x", divOperator = "/", numOne = "1", numTwo = "2", numThree = "3", numFour = "4", numZero = "0", numFive = "5", numSix = "6", numSeven = "7", numEight = "8", numNine = "9", equalOperator = "=", decimalOperator = ".";
 
 	Queue<String> DisplayList;	//using a linked blocking queue b/c its unbound + FIFO
-	Queue<String> NumberList; //used to hold all operands
+	Queue<String> NumberList; //used to hold all numbers + numdividers
+	Queue<String> OperatorList; //used to hold all operands
 	
 	public MainActivity() {
 		this.DisplayList = new LinkedBlockingQueue<String>();
 		this.NumberList = new LinkedBlockingQueue<String>();
+		this.OperatorList = new LinkedBlockingQueue<String>();
 	}
 	
-	//Used to display items that were punched into the calculator
+	//Used to display items that were punched into the calculator (Operators and numbers)
 	public void Display_Items(Queue<String> DisplayList) {
 		if(DisplayList.isEmpty()) {
 			displayarray.setText("0");
@@ -43,6 +46,42 @@ public class MainActivity extends ActionBarActivity {
 				Printstring = Printstring + (String)readall.next();
 			}
 			display.setText(Printstring);
+		}
+		return;
+	}
+	
+	//Used to display items that were punched into the calculator (Operators and numbers)
+	public void Display_Operators(Queue<String> OperatorList) {
+		if(OperatorList.isEmpty()) {
+			displayoperator.setText("0");
+		} else {
+			String Printstring = new String();
+			displayoperator.setText(OperatorList.toString());
+			
+			//use an iterator to read all values in the queue
+			Iterator<String> readall = OperatorList.iterator();
+			while(readall.hasNext()) {
+				Printstring = Printstring + (String)readall.next();
+			}
+			displayoperator.setText(Printstring);
+		}
+		return;
+	}
+	
+	//Used to display numbers that were punched into the calculator on a seperate list
+	public void Display_NumItems(Queue<String> NumberList) {
+		if(NumberList.isEmpty()) {
+			displaynumber.setText("0");
+		} else {
+			String Printstring = new String();
+			displaynumber.setText(NumberList.toString());
+			
+			//use an iterator to read all values in the queue
+			Iterator<String> readall = NumberList.iterator();
+			while(readall.hasNext()) {
+				Printstring = Printstring + (String)readall.next();
+			}
+			displaynumber.setText(Printstring);
 		}
 		return;
 	}
@@ -64,6 +103,23 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 	
+	//Precondition: Intakes a queue with at least 1 element
+	//Postcondition: Returns the last element of the queue, and restores queue used
+	public String getLastElement(Queue<String> Queue) {
+		LinkedBlockingQueue<String> RestoringQueue = new LinkedBlockingQueue<String>();
+		String temp = Queue.poll();
+		RestoringQueue.add(temp);
+		//add strings to temporary RestoringQueue to copy back to old queue
+		while(Queue.peek() != null) {
+			temp = Queue.poll();
+			RestoringQueue.add(temp);
+		}
+		while(RestoringQueue.peek() != null) {
+			Queue.add(RestoringQueue.poll());
+		}
+		return temp;
+	}
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +127,9 @@ public class MainActivity extends ActionBarActivity {
   
         //Making my buttons and declaring my display
         display = (TextView) findViewById(R.id.DisplayResult);
+        displaynumber = (TextView) findViewById(R.id.DisplayNumbers);
         displayarray = (TextView) findViewById(R.id.DisplayArray);
+        displayoperator = (TextView) findViewById(R.id.DisplayOperator);
         add = (Button) findViewById(R.id.bAdd);
         sub = (Button) findViewById(R.id.bSub);
         mul = (Button) findViewById(R.id.bMul);
@@ -96,7 +154,11 @@ public class MainActivity extends ActionBarActivity {
         	
         	public void onClick(View v) {
         		DisplayList.add(plusOperator);
+        		NumberList.add(numDivider);
+        		OperatorList.add(plusOperator);
         		Display_Items(DisplayList);
+        		Display_Operators(OperatorList);
+        		Display_NumItems(NumberList);
         	}
         });
         
@@ -104,7 +166,11 @@ public class MainActivity extends ActionBarActivity {
         	
         	public void onClick(View v) {
         		DisplayList.add(subOperator);
+        		NumberList.add(numDivider);
+        		OperatorList.add(subOperator);
         		Display_Items(DisplayList);
+        		Display_Operators(OperatorList);
+        		Display_NumItems(NumberList);
         	}
         });
     
@@ -112,7 +178,11 @@ public class MainActivity extends ActionBarActivity {
        	
        	public void onClick(View v) {
     		DisplayList.add(mulOperator);
+    		NumberList.add(numDivider);
+    		OperatorList.add(mulOperator);
     		Display_Items(DisplayList);
+    		Display_Operators(OperatorList);
+    		Display_NumItems(NumberList);
        	}
        });
        
@@ -120,7 +190,11 @@ public class MainActivity extends ActionBarActivity {
        	
        	public void onClick(View v) {
     		DisplayList.add(divOperator);
+    		NumberList.add(numDivider);
+    		OperatorList.add(divOperator);
     		Display_Items(DisplayList);
+    		Display_Operators(OperatorList);
+    		Display_NumItems(NumberList);
        	}
        });
        
@@ -152,6 +226,8 @@ public class MainActivity extends ActionBarActivity {
     		DisplayList.add(numZero);
     		NumberList.add(numZero);
     		Display_Items(DisplayList);
+    		Display_Operators(OperatorList);
+    		Display_NumItems(NumberList);
       	}
       });
       
@@ -161,6 +237,8 @@ public class MainActivity extends ActionBarActivity {
     		DisplayList.add(numOne);
     		NumberList.add(numOne);
     		Display_Items(DisplayList);
+    		Display_Operators(OperatorList);
+    		Display_NumItems(NumberList);
       	}
       });
       
@@ -170,6 +248,8 @@ public class MainActivity extends ActionBarActivity {
     		DisplayList.add(numTwo);
     		NumberList.add(numTwo);
     		Display_Items(DisplayList);
+    		Display_Operators(OperatorList);
+    		Display_NumItems(NumberList);
       	}
       });
       
@@ -179,6 +259,8 @@ public class MainActivity extends ActionBarActivity {
     		DisplayList.add(numThree);
     		NumberList.add(numThree);
     		Display_Items(DisplayList);
+    		Display_Operators(OperatorList);
+    		Display_NumItems(NumberList);
       	}
       });
       
@@ -188,6 +270,8 @@ public class MainActivity extends ActionBarActivity {
     		DisplayList.add(numFour);
     		NumberList.add(numFour);
     		Display_Items(DisplayList);
+    		Display_Operators(OperatorList);
+    		Display_NumItems(NumberList);
       	}
       });
       
@@ -197,6 +281,8 @@ public class MainActivity extends ActionBarActivity {
     		DisplayList.add(numFive);
     		NumberList.add(numFive);
     		Display_Items(DisplayList);
+    		Display_Operators(OperatorList);
+    		Display_NumItems(NumberList);
       	}
       });
       
@@ -206,6 +292,8 @@ public class MainActivity extends ActionBarActivity {
     		DisplayList.add(numSix);
     		NumberList.add(numSix);
     		Display_Items(DisplayList);
+    		Display_Operators(OperatorList);
+    		Display_NumItems(NumberList);
       	}
       });
       
@@ -215,6 +303,8 @@ public class MainActivity extends ActionBarActivity {
     		DisplayList.add(numSeven);
     		NumberList.add(numSeven);
     		Display_Items(DisplayList);
+    		Display_Operators(OperatorList);
+    		Display_NumItems(NumberList);
       	}
       });
       
@@ -224,6 +314,8 @@ public class MainActivity extends ActionBarActivity {
     		DisplayList.add(numEight);
     		NumberList.add(numEight);
     		Display_Items(DisplayList);
+    		Display_Operators(OperatorList);
+    		Display_NumItems(NumberList);
       	}
       });
       
@@ -233,6 +325,8 @@ public class MainActivity extends ActionBarActivity {
     		DisplayList.add(numNine);
     		NumberList.add(numNine);
     		Display_Items(DisplayList);
+    		Display_Operators(OperatorList);
+    		Display_NumItems(NumberList);
       	}
       });
       
@@ -245,7 +339,10 @@ public class MainActivity extends ActionBarActivity {
       	public void onClick(View v) {
       		DisplayList.clear();
       		NumberList.clear();
-      		Display_Items(DisplayList);
+      		OperatorList.clear();
+    		Display_Items(DisplayList);
+    		Display_Operators(OperatorList);
+    		Display_NumItems(NumberList);
       		//TODO: will have to clear all other arrays/stacks/queues used in the near future
       	}
       });
@@ -257,7 +354,9 @@ public class MainActivity extends ActionBarActivity {
     	//               
       	public void onClick(View v) {
       		DisplayList = rEndofDisplayQueue(DisplayList);
-      		Display_Items(DisplayList);
+    		Display_Items(DisplayList);
+    		Display_Operators(OperatorList);
+    		Display_NumItems(NumberList);
       	}
       });
     }
