@@ -1,0 +1,361 @@
+//NOTE TO SELF: Implemented displaying numbers on 1 array, need to add dividers when add, sub, divide, or mul operators pressed.
+package com.example.calculator_implementation;
+
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.Iterator;
+import java.util.Queue;
+import java.util.Stack;
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class MainActivity extends ActionBarActivity {
+	/* Is Called when the activity is first created*/
+	Button add, sub, mul, div, zero, one, two, three, four, five, six, seven, eight, nine, negative, decimal, clear, delete, equal;
+	TextView display, displayarray, displaynumber, displayoperator;
+	String result;
+	String numDivider = "|", plusOperator = "+", subOperator = "-", mulOperator = "x", divOperator = "/", numOne = "1", numTwo = "2", numThree = "3", numFour = "4", numZero = "0", numFive = "5", numSix = "6", numSeven = "7", numEight = "8", numNine = "9", equalOperator = "=", decimalOperator = ".";
+
+	Queue<String> DisplayList;	//using a linked blocking queue b/c its unbound + FIFO
+	Queue<String> NumberList; //used to hold all numbers + numdividers
+	Queue<String> OperatorList; //used to hold all operands
+	
+	public MainActivity() {
+		this.DisplayList = new LinkedBlockingQueue<String>();
+		this.NumberList = new LinkedBlockingQueue<String>();
+		this.OperatorList = new LinkedBlockingQueue<String>();
+	}
+	
+	//Updates all displays, including Item Display, Operator Display, Number Display
+	public void Update_All(Queue<String> DisplayList, Queue<String> NumberList, Queue<String> OperatorList) {
+		Display_Items(DisplayList);
+		Display_NumItems(NumberList);
+		Display_Operators(OperatorList);
+	}
+	
+	//Used to display items that were punched into the calculator (Operators and numbers)
+	public void Display_Items(Queue<String> DisplayList) {
+		if(DisplayList.isEmpty()) {
+			displayarray.setText("0");
+			display.setText("0");
+		} else {
+			String Printstring = new String();
+			displayarray.setText(DisplayList.toString());
+			
+			//use an iterator to read all values in the queue
+			Iterator<String> readall = DisplayList.iterator();
+			while(readall.hasNext()) {
+				Printstring = Printstring + (String)readall.next();
+			}
+			display.setText(Printstring);
+		}
+		return;
+	}
+	
+	//Used to display items that were punched into the calculator (Operators and numbers)
+	public void Display_Operators(Queue<String> OperatorList) {
+		if(OperatorList.isEmpty()) {
+			displayoperator.setText("0");
+		} else {
+			String Printstring = new String();
+			displayoperator.setText(OperatorList.toString());
+			
+			//use an iterator to read all values in the queue
+			Iterator<String> readall = OperatorList.iterator();
+			while(readall.hasNext()) {
+				Printstring = Printstring + (String)readall.next();
+			}
+			displayoperator.setText(Printstring);
+		}
+		return;
+	}
+	
+	//Used to display numbers that were punched into the calculator on a seperate list
+	public void Display_NumItems(Queue<String> NumberList) {
+		if(NumberList.isEmpty()) {
+			displaynumber.setText("0");
+		} else {
+			String Printstring = new String();
+			displaynumber.setText(NumberList.toString());
+			
+			//use an iterator to read all values in the queue
+			Iterator<String> readall = NumberList.iterator();
+			while(readall.hasNext()) {
+				Printstring = Printstring + (String)readall.next();
+			}
+			displaynumber.setText(Printstring);
+		}
+		return;
+	}
+	
+	//Precondition: takes in a queue that is full of strings
+	//Postcondition: returns a queue with the last element removed
+	public Queue<String> rEndofQueue(Queue<String> Queue) {
+		LinkedBlockingQueue<String> ReturnQueue = new LinkedBlockingQueue<String>();
+		if(Queue.isEmpty() == true) {
+			return Queue;
+		} else {
+			String temp = Queue.poll();
+			while(Queue.peek() != null) {
+				ReturnQueue.add(temp);
+				temp = Queue.poll();
+			}
+			return ReturnQueue;
+		}
+	}
+	
+	//Precondition: Intakes a queue with at least 1 element
+	//Postcondition: Returns the last element of the queue, and restores queue used
+	public String getLastElement(Queue<String> Queue) {
+		LinkedBlockingQueue<String> RestoringQueue = new LinkedBlockingQueue<String>();
+		String temp = Queue.poll();
+		RestoringQueue.add(temp);
+		//add strings to temporary RestoringQueue to copy back to old queue
+		while(Queue.peek() != null) {
+			temp = Queue.poll();
+			RestoringQueue.add(temp);
+		}
+		while(RestoringQueue.peek() != null) {
+			Queue.add(RestoringQueue.poll());
+		}
+		return temp;
+	}
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+  
+        //Making my buttons and declaring my display
+        display = (TextView) findViewById(R.id.DisplayResult);
+        displaynumber = (TextView) findViewById(R.id.DisplayNumbers);
+        displayarray = (TextView) findViewById(R.id.DisplayArray);
+        displayoperator = (TextView) findViewById(R.id.DisplayOperator);
+        add = (Button) findViewById(R.id.bAdd);
+        sub = (Button) findViewById(R.id.bSub);
+        mul = (Button) findViewById(R.id.bMul);
+        div = (Button) findViewById(R.id.bDiv);
+        zero = (Button) findViewById(R.id.bZero);
+        one = (Button) findViewById(R.id.bOne);
+        two = (Button) findViewById(R.id.bTwo);
+        three = (Button) findViewById(R.id.bThree);
+        four = (Button) findViewById(R.id.bFour);
+        five = (Button) findViewById(R.id.bFive);
+        six = (Button) findViewById(R.id.bSix);
+        seven = (Button) findViewById(R.id.bSeven);
+        eight = (Button) findViewById(R.id.bEight);
+        nine = (Button) findViewById(R.id.bNine);
+        equal = (Button) findViewById(R.id.bEqual);
+        decimal = (Button) findViewById(R.id.bDecimal);
+        negative = (Button) findViewById(R.id.bNegative);
+        clear = (Button) findViewById(R.id.bClear);
+        delete = (Button) findViewById(R.id.bDel);
+        
+       add.setOnClickListener(new View.OnClickListener() {
+        	
+        	public void onClick(View v) {
+        		DisplayList.add(plusOperator);
+        		NumberList.add(numDivider);
+        		OperatorList.add(plusOperator);
+        		Update_All(DisplayList, NumberList, OperatorList);
+        	}
+        });
+        
+       sub.setOnClickListener(new View.OnClickListener() {
+        	
+        	public void onClick(View v) {
+        		DisplayList.add(subOperator);
+        		NumberList.add(numDivider);
+        		OperatorList.add(subOperator);
+        		Update_All(DisplayList, NumberList, OperatorList);
+        	}
+        });
+    
+       mul.setOnClickListener(new View.OnClickListener() {
+       	
+       	public void onClick(View v) {
+    		DisplayList.add(mulOperator);
+    		NumberList.add(numDivider);
+    		OperatorList.add(mulOperator);
+    		Update_All(DisplayList, NumberList, OperatorList);
+       	}
+       });
+       
+       div.setOnClickListener(new View.OnClickListener() {
+       	
+       	public void onClick(View v) {
+    		DisplayList.add(divOperator);
+    		NumberList.add(numDivider);
+    		OperatorList.add(divOperator);
+    		Update_All(DisplayList, NumberList, OperatorList);
+       	}
+       });
+       
+       equal.setOnClickListener(new View.OnClickListener() {
+       	
+       	public void onClick(View v) {
+       		//TODO: write an evaluate function for this part
+       	}
+       });
+       
+      negative.setOnClickListener(new View.OnClickListener() {
+       	
+       	public void onClick(View v) {
+       		//TODO: implement this
+       	}
+       });
+      
+      decimal.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		DisplayList.add(decimalOperator);
+      		Display_Items(DisplayList);
+      	}
+      });
+      
+      zero.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numZero);
+    		NumberList.add(numZero);
+    		Update_All(DisplayList, NumberList, OperatorList);
+      	}
+      });
+      
+      one.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numOne);
+    		NumberList.add(numOne);
+    		Update_All(DisplayList, NumberList, OperatorList);
+      	}
+      });
+      
+      two.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numTwo);
+    		NumberList.add(numTwo);
+    		Update_All(DisplayList, NumberList, OperatorList);
+      	}
+      });
+      
+      three.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numThree);
+    		NumberList.add(numThree);
+    		Update_All(DisplayList, NumberList, OperatorList);
+      	}
+      });
+      
+      four.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numFour);
+    		NumberList.add(numFour);
+    		Update_All(DisplayList, NumberList, OperatorList);
+      	}
+      });
+      
+      five.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numFive);
+    		NumberList.add(numFive);
+    		Update_All(DisplayList, NumberList, OperatorList);
+      	}
+      });
+      
+      six.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numSix);
+    		NumberList.add(numSix);
+    		Update_All(DisplayList, NumberList, OperatorList);
+      	}
+      });
+      
+      seven.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numSeven);
+    		NumberList.add(numSeven);
+    		Update_All(DisplayList, NumberList, OperatorList);
+      	}
+      });
+      
+      eight.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numEight);
+    		NumberList.add(numEight);
+    		Update_All(DisplayList, NumberList, OperatorList);
+      	}
+      });
+      
+      nine.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+    		DisplayList.add(numNine);
+    		NumberList.add(numNine);
+    		Update_All(DisplayList, NumberList, OperatorList);
+      	}
+      });
+      
+      clear.setOnClickListener(new View.OnClickListener() {
+      	
+      	public void onClick(View v) {
+      		DisplayList.clear();
+      		NumberList.clear();
+      		OperatorList.clear();
+    		Update_All(DisplayList, NumberList, OperatorList);
+      		//TODO: will have to clear all other arrays/stacks/queues used in the near future
+      	}
+      });
+      
+      delete.setOnClickListener(new View.OnClickListener() {
+      	
+    	//Precondition: button is just pressed
+    	//Postcondition: DisplayQueue has 1 item removed at the end
+    	//               
+      	public void onClick(View v) {
+      		String lastElement = getLastElement(DisplayList);
+      		if(lastElement.equals(plusOperator) || lastElement.equals(subOperator) || lastElement.equals(mulOperator) || lastElement.equals(divOperator)) {
+      			DisplayList = rEndofQueue(DisplayList);
+      			OperatorList = rEndofQueue(OperatorList);
+      			NumberList = rEndofQueue(NumberList);
+      		}
+      		else {
+      			DisplayList = rEndofQueue(DisplayList);
+      			NumberList = rEndofQueue(NumberList);
+      		}
+    		Update_All(DisplayList, NumberList, OperatorList);
+      	}
+      });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}

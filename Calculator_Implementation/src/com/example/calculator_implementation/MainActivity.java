@@ -1,4 +1,3 @@
-//NOTE TO SELF: Implemented displaying numbers on 1 array, need to add dividers when add, sub, divide, or mul operators pressed.
 package com.example.calculator_implementation;
 
 import android.support.v7.app.ActionBarActivity;
@@ -29,6 +28,13 @@ public class MainActivity extends ActionBarActivity {
 		this.DisplayList = new LinkedBlockingQueue<String>();
 		this.NumberList = new LinkedBlockingQueue<String>();
 		this.OperatorList = new LinkedBlockingQueue<String>();
+	}
+	
+	//Updates all displays, including Item Display, Operator Display, Number Display
+	public void Update_All(Queue<String> DisplayList, Queue<String> NumberList, Queue<String> OperatorList) {
+		Display_Items(DisplayList);
+		Display_NumItems(NumberList);
+		Display_Operators(OperatorList);
 	}
 	
 	//Used to display items that were punched into the calculator (Operators and numbers)
@@ -88,16 +94,15 @@ public class MainActivity extends ActionBarActivity {
 	
 	//Precondition: takes in a queue that is full of strings
 	//Postcondition: returns a queue with the last element removed
-	public Queue<String> rEndofDisplayQueue(Queue<String> DisplayQueue) {
+	public Queue<String> rEndofQueue(Queue<String> Queue) {
 		LinkedBlockingQueue<String> ReturnQueue = new LinkedBlockingQueue<String>();
-		if(DisplayQueue.isEmpty() == true) {
-			return DisplayQueue;
-		}
-		else {
-			String temp = DisplayQueue.poll();
-			while(DisplayQueue.peek() != null) {
+		if(Queue.isEmpty() == true) {
+			return Queue;
+		} else {
+			String temp = Queue.poll();
+			while(Queue.peek() != null) {
 				ReturnQueue.add(temp);
-				temp = DisplayQueue.poll();
+				temp = Queue.poll();
 			}
 			return ReturnQueue;
 		}
@@ -149,52 +154,69 @@ public class MainActivity extends ActionBarActivity {
         negative = (Button) findViewById(R.id.bNegative);
         clear = (Button) findViewById(R.id.bClear);
         delete = (Button) findViewById(R.id.bDel);
+
         
+       /* Method: Add
+        * Precondition: None
+        * Postcondition: adds the string "+" to Operatorlist and displaylist, as well
+        * as the string "|" to numberList to indicate a number parse. Then
+        * updates list to show number has been inputed on display.
+        */
        add.setOnClickListener(new View.OnClickListener() {
         	
         	public void onClick(View v) {
         		DisplayList.add(plusOperator);
         		NumberList.add(numDivider);
         		OperatorList.add(plusOperator);
-        		Display_Items(DisplayList);
-        		Display_Operators(OperatorList);
-        		Display_NumItems(NumberList);
+        		Update_All(DisplayList, NumberList, OperatorList);
         	}
         });
         
+       /* Method: Sub
+        * Precondition: None
+        * Postcondition: adds the string "-" to Operatorlist and displaylist, as well
+        * as the string "|" to numberList to indicate a number parse. Then
+        * updates list to show number has been inputed on display.
+        */
        sub.setOnClickListener(new View.OnClickListener() {
         	
         	public void onClick(View v) {
         		DisplayList.add(subOperator);
         		NumberList.add(numDivider);
         		OperatorList.add(subOperator);
-        		Display_Items(DisplayList);
-        		Display_Operators(OperatorList);
-        		Display_NumItems(NumberList);
+        		Update_All(DisplayList, NumberList, OperatorList);
         	}
         });
     
+       /* Method: Mul
+        * Precondition: None
+        * Postcondition: adds the string "x" to Operatorlist and displaylist, as well
+        * as the string "|" to numberList to indicate a number parse. Then
+        * updates list to show number has been inputed on display.
+        */
        mul.setOnClickListener(new View.OnClickListener() {
        	
        	public void onClick(View v) {
     		DisplayList.add(mulOperator);
     		NumberList.add(numDivider);
     		OperatorList.add(mulOperator);
-    		Display_Items(DisplayList);
-    		Display_Operators(OperatorList);
-    		Display_NumItems(NumberList);
+    		Update_All(DisplayList, NumberList, OperatorList);
        	}
        });
        
+       /* Method: Div
+        * Precondition: None
+        * Postcondition: adds the string "/" to Operatorlist and displaylist, as well
+        * as the string "|" to numberList to indicate a number parse. Then
+        * updates list to show number has been inputed on display.
+        */
        div.setOnClickListener(new View.OnClickListener() {
        	
        	public void onClick(View v) {
     		DisplayList.add(divOperator);
     		NumberList.add(numDivider);
     		OperatorList.add(divOperator);
-    		Display_Items(DisplayList);
-    		Display_Operators(OperatorList);
-    		Display_NumItems(NumberList);
+    		Update_All(DisplayList, NumberList, OperatorList);
        	}
        });
        
@@ -220,147 +242,185 @@ public class MainActivity extends ActionBarActivity {
       	}
       });
       
+      /* Method: Zero
+       * Precondition: None
+       * Postcondition: adds the string "0" to numberlist and displaylist. Then
+       * updates list to show number has been inputed on display.
+       */
       zero.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
     		DisplayList.add(numZero);
     		NumberList.add(numZero);
-    		Display_Items(DisplayList);
-    		Display_Operators(OperatorList);
-    		Display_NumItems(NumberList);
+    		Update_All(DisplayList, NumberList, OperatorList);
       	}
       });
       
+      /* Method: One
+       * Precondition: None
+       * Postcondition: adds the string "1" to numberlist and displaylist. Then
+       * updates list to show number has been inputed on display.
+       */
       one.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
     		DisplayList.add(numOne);
     		NumberList.add(numOne);
-    		Display_Items(DisplayList);
-    		Display_Operators(OperatorList);
-    		Display_NumItems(NumberList);
+    		Update_All(DisplayList, NumberList, OperatorList);
       	}
       });
       
+      /* Method: Two
+       * Precondition: None
+       * Postcondition: adds the string "2" to numberlist and displaylist. Then
+       * updates list to show number has been inputed on display.
+       */
       two.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
     		DisplayList.add(numTwo);
     		NumberList.add(numTwo);
-    		Display_Items(DisplayList);
-    		Display_Operators(OperatorList);
-    		Display_NumItems(NumberList);
+    		Update_All(DisplayList, NumberList, OperatorList);
       	}
       });
       
+      /* Method: Three
+       * Precondition: None
+       * Postcondition: adds the string "3" to numberlist and displaylist. Then
+       * updates list to show number has been inputed on display.
+       */
       three.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
     		DisplayList.add(numThree);
     		NumberList.add(numThree);
-    		Display_Items(DisplayList);
-    		Display_Operators(OperatorList);
-    		Display_NumItems(NumberList);
+    		Update_All(DisplayList, NumberList, OperatorList);
       	}
       });
       
+      /* Method: Four
+       * Precondition: None
+       * Postcondition: adds the string "4" to numberlist and displaylist. Then
+       * updates list to show number has been inputed on display.
+       */
       four.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
     		DisplayList.add(numFour);
     		NumberList.add(numFour);
-    		Display_Items(DisplayList);
-    		Display_Operators(OperatorList);
-    		Display_NumItems(NumberList);
+    		Update_All(DisplayList, NumberList, OperatorList);
       	}
       });
       
+      /* Method: Five
+       * Precondition: None
+       * Postcondition: adds the string "5" to numberlist and displaylist. Then
+       * updates list to show number has been inputed on display.
+       */
       five.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
     		DisplayList.add(numFive);
     		NumberList.add(numFive);
-    		Display_Items(DisplayList);
-    		Display_Operators(OperatorList);
-    		Display_NumItems(NumberList);
+    		Update_All(DisplayList, NumberList, OperatorList);
       	}
       });
       
+      /* Method: Six
+       * Precondition: None
+       * Postcondition: adds the string "6" to numberlist and displaylist. Then
+       * updates list to show number has been inputed on display.
+       */
       six.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
     		DisplayList.add(numSix);
     		NumberList.add(numSix);
-    		Display_Items(DisplayList);
-    		Display_Operators(OperatorList);
-    		Display_NumItems(NumberList);
+    		Update_All(DisplayList, NumberList, OperatorList);
       	}
       });
       
+      /* Method: Seven
+       * Precondition: None
+       * Postcondition: adds the string "7" to numberlist and displaylist. Then
+       * updates list to show number has been inputed on display.
+       */
       seven.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
     		DisplayList.add(numSeven);
     		NumberList.add(numSeven);
-    		Display_Items(DisplayList);
-    		Display_Operators(OperatorList);
-    		Display_NumItems(NumberList);
+    		Update_All(DisplayList, NumberList, OperatorList);
       	}
       });
       
+      /* Method: Eight
+       * Precondition: None
+       * Postcondition: adds the string "8" to numberlist and displaylist. Then
+       * updates list to show number has been inputed on display.
+       */
       eight.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
     		DisplayList.add(numEight);
     		NumberList.add(numEight);
-    		Display_Items(DisplayList);
-    		Display_Operators(OperatorList);
-    		Display_NumItems(NumberList);
+    		Update_All(DisplayList, NumberList, OperatorList);
       	}
       });
       
+      /* Method: Nine
+       * Precondition: None
+       * Postcondition: adds the string "9" to numberlist and displaylist. Then
+       * updates list to show number has been inputed on display.
+       */
       nine.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
     		DisplayList.add(numNine);
     		NumberList.add(numNine);
-    		Display_Items(DisplayList);
-    		Display_Operators(OperatorList);
-    		Display_NumItems(NumberList);
+    		Update_All(DisplayList, NumberList, OperatorList);
       	}
       });
       
+  	/* Method: Clear
+  	 * Precondition: NumberList, DisplayList exist as queues
+  	 * Postcondition: NumberList DisplayList are cleared and Display is shown to look 'reset'
+  	 * by clearing all data in the queue and updating the display
+  	 */
       clear.setOnClickListener(new View.OnClickListener() {
       	
-    	/*
-    	 * Precondition: NumberList, DisplayList exist as queues
-    	 * Postcondition: NumberList DisplayList are cleared and Display is shown to look 'reset'
-    	 */
       	public void onClick(View v) {
       		DisplayList.clear();
       		NumberList.clear();
       		OperatorList.clear();
-    		Display_Items(DisplayList);
-    		Display_Operators(OperatorList);
-    		Display_NumItems(NumberList);
+    		Update_All(DisplayList, NumberList, OperatorList);
       		//TODO: will have to clear all other arrays/stacks/queues used in the near future
       	}
       });
       
       delete.setOnClickListener(new View.OnClickListener() {
       	
-    	//Precondition: button is just pressed
-    	//Postcondition: DisplayQueue has 1 item removed at the end
-    	//               
+    	  /* Method: Delete
+    	   * Precondition: Three queues which store strings exist (display, operator, number)
+    	   * Postcondition: If last element in the queue holding all items is an operator,
+    	   * delete end element in all queues (display, operator, number). Else, delete the
+    	   * end element of display and number queue.
+    	   */
       	public void onClick(View v) {
-      		DisplayList = rEndofDisplayQueue(DisplayList);
-    		Display_Items(DisplayList);
-    		Display_Operators(OperatorList);
-    		Display_NumItems(NumberList);
+      		String lastElement = getLastElement(DisplayList);
+      		if(lastElement.equals(plusOperator) || lastElement.equals(subOperator) || lastElement.equals(mulOperator) || lastElement.equals(divOperator)) {
+      			DisplayList = rEndofQueue(DisplayList);
+      			OperatorList = rEndofQueue(OperatorList);
+      			NumberList = rEndofQueue(NumberList);
+      		}
+      		else {
+      			DisplayList = rEndofQueue(DisplayList);
+      			NumberList = rEndofQueue(NumberList);
+      		}
+    		Update_All(DisplayList, NumberList, OperatorList);
       	}
       });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
