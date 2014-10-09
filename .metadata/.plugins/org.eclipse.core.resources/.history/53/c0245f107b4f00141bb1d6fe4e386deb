@@ -127,21 +127,9 @@ public class MainActivity extends ActionBarActivity {
 	}
 	
 	//Precondition:
-	public Boolean isNumListValid() {
-		//TODO: implement a validity check for NumberList
-		return false;
+	public Boolean isNumListValid(Queue<String> Queue) {
+		//TODO: implement a validity check 
 	}
-	
-	public Boolean isOpListValid() {
-		//TODO: implement a validity check on OperatorList
-		return false;
-	}
-	
-	public Boolean isDispListValid() {
-		//TODO: implement a validity check on DisplayList
-		return false;
-	}
-	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
