@@ -18,7 +18,7 @@ public class MainActivity extends ActionBarActivity {
 	Button add, sub, mul, div, zero, one, two, three, four, five, six, seven, eight, nine, negative, decimal, clear, delete, equal;
 	TextView display, displayarray, displaynumber, displayoperator;
 	String result;
-	String numDivider = "|", plusOperator = "+", subOperator = "-", mulOperator = "x", divOperator = "/", numOne = "1", numTwo = "2", numThree = "3", numFour = "4", numZero = "0", numFive = "5", numSix = "6", numSeven = "7", numEight = "8", numNine = "9", equalOperator = "=", decimalOperator = ".";
+	String negOperator = "_", numDivider = "|", plusOperator = "+", subOperator = "-", mulOperator = "x", divOperator = "/", numOne = "1", numTwo = "2", numThree = "3", numFour = "4", numZero = "0", numFive = "5", numSix = "6", numSeven = "7", numEight = "8", numNine = "9", equalOperator = "=", decimalOperator = ".";
 
 	Queue<String> DisplayList;	//using a linked blocking queue b/c its unbound + FIFO
 	Queue<String> NumberList; //used to hold all numbers + numdividers
@@ -32,7 +32,7 @@ public class MainActivity extends ActionBarActivity {
 	}
 	
 	//Updates all displays, including Item Display, Operator Display, Number Display
-	public void Update_All(Queue<String> DisplayList, Queue<String> NumberList, Queue<String> OperatorList) {
+	public void Update_All() {
 		Display_Items(DisplayList);
 		Display_NumItems(NumberList);
 		Display_Operators(OperatorList);
@@ -126,18 +126,111 @@ public class MainActivity extends ActionBarActivity {
 		return temp;
 	}
 	
-	//Precondition:
-	public Boolean isNumListValid() {
-		//TODO: implement a validity check for NumberList
-		return false;
+	/* Precondition: NumberList exists
+	 * Postcondition: Iterates through 
+	 *
+	 */
+	public boolean isNumValid() {
+		//add a queue that will be used to restore the queue later on
+		LinkedBlockingQueue<String> RestoringQueue = new LinkedBlockingQueue<String>();
+		LinkedBlockingQueue<String> UsableQueue = new LinkedBlockingQueue<String>();
+		
+		int decimalcount;
+		int numElements;
+		boolean isValid = true;
+		
+		String temp = null; //default is null
+		//if NumberList is empty, return true (no numbers is still considered valid; no syntax errors)
+		if(NumberList.isEmpty()) {
+			isValid = true;
+			return isValid;
+		} else {
+			//Copy values to another queue so we can dissect it
+			while(NumberList.peek() != null) {
+				temp = NumberList.poll();
+				RestoringQueue.add(temp);
+				UsableQueue.add(temp);
+			}
+			//reCopy values back to old queue
+			while(RestoringQueue.peek() != null) {
+				temp = RestoringQueue.poll();
+				NumberList.add(temp);
+			}
+			
+			//if beginning element is a "|", then that means an operator was the first item pressed, return false
+			if(UsableQueue.peek().equals(numDivider)) {
+				isValid = false;
+				return isValid;
+			} else {	
+				//Iterates through queue until an error is found
+				while(UsableQueue.isEmpty() == false) {
+					temp = UsableQueue.poll();
+					decimalcount = 0;
+					numElements = 0;
+					//
+					if(temp.equals(negOperator)) {
+						if(UsableQueue.isEmpty() == true){
+							isValid = false;
+							return isValid;
+						} else if((UsableQueue.peek()).equals(numDivider)) {
+							isValid = false;
+							return isValid;
+						}
+					} else if(temp.equals(decimalOperator)) {
+						decimalcount++;
+						numElements++;
+						if(UsableQueue.isEmpty() == true) {
+							isValid = false;
+							return isValid;
+						} else if((UsableQueue.peek()).equals(numDivider)) {
+							isValid = false;
+							return isValid;
+						}
+					} else {
+						numElements++;
+						if(UsableQueue.isEmpty() == true){
+							isValid = true;
+						} else if((UsableQueue.peek()).equals(numDivider)) {
+							isValid = false;
+							return isValid;
+						}
+					}
+					while(UsableQueue.isEmpty() == false) {
+						temp = UsableQueue.poll();
+						if(temp.equals(numDivider)) {
+							decimalcount = 0;
+							numElements = 0;
+							break;
+						} else if(temp.equals(negOperator)) {
+							isValid = false;
+							return isValid;
+						} else if(temp.equals(decimalOperator)) {
+							decimalcount++;
+							numElements++;
+						} else {
+							numElements++;
+						}
+						
+						if(decimalcount > 1) {
+							isValid = false;
+							return isValid;
+						}
+					}
+				}
+				if(temp.equals(numDivider)) {
+					isValid = false;
+				}
+				return isValid;
+			}
+		}
 	}
 	
-	public Boolean isOpListValid() {
+	public Boolean isOpValid() {
 		//TODO: implement a validity check on OperatorList
 		return false;
 	}
 	
-	public Boolean isDispListValid() {
+	public Boolean isDispValid() {
 		//TODO: implement a validity check on DisplayList
 		return false;
 	}
@@ -185,7 +278,7 @@ public class MainActivity extends ActionBarActivity {
         		DisplayList.add(plusOperator);
         		NumberList.add(numDivider);
         		OperatorList.add(plusOperator);
-        		Update_All(DisplayList, NumberList, OperatorList);
+        		Update_All();
         	}
         });
         
@@ -201,7 +294,7 @@ public class MainActivity extends ActionBarActivity {
         		DisplayList.add(subOperator);
         		NumberList.add(numDivider);
         		OperatorList.add(subOperator);
-        		Update_All(DisplayList, NumberList, OperatorList);
+        		Update_All();
         	}
         });
     
@@ -217,7 +310,7 @@ public class MainActivity extends ActionBarActivity {
     		DisplayList.add(mulOperator);
     		NumberList.add(numDivider);
     		OperatorList.add(mulOperator);
-    		Update_All(DisplayList, NumberList, OperatorList);
+    		Update_All();
        	}
        });
        
@@ -233,30 +326,47 @@ public class MainActivity extends ActionBarActivity {
     		DisplayList.add(divOperator);
     		NumberList.add(numDivider);
     		OperatorList.add(divOperator);
-    		Update_All(DisplayList, NumberList, OperatorList);
+    		Update_All();
        	}
        });
        
        equal.setOnClickListener(new View.OnClickListener() {
        	
        	public void onClick(View v) {
-       		Boolean foo = isValid(NumberList);
-       		Update_All(DisplayList, NumberList, OperatorList);
+       		Boolean numValid = isNumValid();
+       		if(numValid == true) {
+       			display.setText("true");
+       		} else if(numValid == false) {
+       			display.setText("false");
+       		}
        	}
        });
        
+       /* Method: Negative
+        * Precondition: None
+        * Postcondition: adds the string "_" to numberlist and "-" to the displaylist. Then
+        * updates list to show number has been inputed on display.
+        */
       negative.setOnClickListener(new View.OnClickListener() {
        	
        	public void onClick(View v) {
-       		//TODO: implement this
+       		NumberList.add(negOperator);
+       		DisplayList.add(subOperator);
+       		Update_All();
        	}
        });
       
+      /* Method: Decimal
+       * Precondition: None
+       * Postcondition: adds the string "." to numberlist and displaylist. Then
+       * updates list to show number has been inputed on display.
+       */
       decimal.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
       		DisplayList.add(decimalOperator);
-      		Display_Items(DisplayList);
+      		NumberList.add(decimalOperator);
+      		Update_All();
       	}
       });
       
@@ -270,7 +380,7 @@ public class MainActivity extends ActionBarActivity {
       	public void onClick(View v) {
     		DisplayList.add(numZero);
     		NumberList.add(numZero);
-    		Update_All(DisplayList, NumberList, OperatorList);
+    		Update_All();
       	}
       });
       
@@ -284,7 +394,7 @@ public class MainActivity extends ActionBarActivity {
       	public void onClick(View v) {
     		DisplayList.add(numOne);
     		NumberList.add(numOne);
-    		Update_All(DisplayList, NumberList, OperatorList);
+    		Update_All();
       	}
       });
       
@@ -298,7 +408,7 @@ public class MainActivity extends ActionBarActivity {
       	public void onClick(View v) {
     		DisplayList.add(numTwo);
     		NumberList.add(numTwo);
-    		Update_All(DisplayList, NumberList, OperatorList);
+    		Update_All();
       	}
       });
       
@@ -312,7 +422,7 @@ public class MainActivity extends ActionBarActivity {
       	public void onClick(View v) {
     		DisplayList.add(numThree);
     		NumberList.add(numThree);
-    		Update_All(DisplayList, NumberList, OperatorList);
+    		Update_All();
       	}
       });
       
@@ -326,7 +436,7 @@ public class MainActivity extends ActionBarActivity {
       	public void onClick(View v) {
     		DisplayList.add(numFour);
     		NumberList.add(numFour);
-    		Update_All(DisplayList, NumberList, OperatorList);
+    		Update_All();
       	}
       });
       
@@ -340,7 +450,7 @@ public class MainActivity extends ActionBarActivity {
       	public void onClick(View v) {
     		DisplayList.add(numFive);
     		NumberList.add(numFive);
-    		Update_All(DisplayList, NumberList, OperatorList);
+    		Update_All();
       	}
       });
       
@@ -354,7 +464,7 @@ public class MainActivity extends ActionBarActivity {
       	public void onClick(View v) {
     		DisplayList.add(numSix);
     		NumberList.add(numSix);
-    		Update_All(DisplayList, NumberList, OperatorList);
+    		Update_All();
       	}
       });
       
@@ -368,7 +478,7 @@ public class MainActivity extends ActionBarActivity {
       	public void onClick(View v) {
     		DisplayList.add(numSeven);
     		NumberList.add(numSeven);
-    		Update_All(DisplayList, NumberList, OperatorList);
+    		Update_All();
       	}
       });
       
@@ -382,7 +492,7 @@ public class MainActivity extends ActionBarActivity {
       	public void onClick(View v) {
     		DisplayList.add(numEight);
     		NumberList.add(numEight);
-    		Update_All(DisplayList, NumberList, OperatorList);
+    		Update_All();
       	}
       });
       
@@ -396,7 +506,7 @@ public class MainActivity extends ActionBarActivity {
       	public void onClick(View v) {
     		DisplayList.add(numNine);
     		NumberList.add(numNine);
-    		Update_All(DisplayList, NumberList, OperatorList);
+    		Update_All();
       	}
       });
       
@@ -411,7 +521,7 @@ public class MainActivity extends ActionBarActivity {
       		DisplayList.clear();
       		NumberList.clear();
       		OperatorList.clear();
-    		Update_All(DisplayList, NumberList, OperatorList);
+    		Update_All();
       		//TODO: will have to clear all other arrays/stacks/queues used in the near future
       	}
       });
@@ -425,17 +535,20 @@ public class MainActivity extends ActionBarActivity {
     	   * end element of display and number queue.
     	   */
       	public void onClick(View v) {
+      		
+      		if(DisplayList.isEmpty() == false) {
       		String lastElement = getLastElement(DisplayList);
-      		if(lastElement.equals(plusOperator) || lastElement.equals(subOperator) || lastElement.equals(mulOperator) || lastElement.equals(divOperator)) {
-      			DisplayList = rEndofQueue(DisplayList);
-      			OperatorList = rEndofQueue(OperatorList);
-      			NumberList = rEndofQueue(NumberList);
+	      		if(lastElement.equals(plusOperator) || lastElement.equals(subOperator) || lastElement.equals(mulOperator) || lastElement.equals(divOperator)) {
+	      			DisplayList = rEndofQueue(DisplayList);
+	      			OperatorList = rEndofQueue(OperatorList);
+	      			NumberList = rEndofQueue(NumberList);
+	      		}
+	      		else {
+	      			DisplayList = rEndofQueue(DisplayList);
+	      			NumberList = rEndofQueue(NumberList);
+	      		}
       		}
-      		else {
-      			DisplayList = rEndofQueue(DisplayList);
-      			NumberList = rEndofQueue(NumberList);
-      		}
-    		Update_All(DisplayList, NumberList, OperatorList);
+    		Update_All();
       	}
       });
     }
