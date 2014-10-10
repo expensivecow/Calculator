@@ -172,17 +172,9 @@ public class MainActivity extends ActionBarActivity {
 						if(UsableQueue.isEmpty() == true){
 							isValid = false;
 							return isValid;
-						} else if( (UsableQueue.peek() ).equals(numDivider)) {
+						} else if((UsableQueue.peek()).equals(numDivider)) {
 							isValid = false;
 							return isValid;
-						} else if(( UsableQueue.peek() ).equals(decimalOperator)) {
-							decimalcount++;
-							numElements++;
-							temp = UsableQueue.poll();
-							if(UsableQueue.isEmpty()) {
-								isValid = false;
-								return isValid;
-							}
 						}
 					} else if(temp.equals(decimalOperator)) {
 						decimalcount++;

@@ -178,7 +178,7 @@ public class MainActivity extends ActionBarActivity {
 						} else if(( UsableQueue.peek() ).equals(decimalOperator)) {
 							decimalcount++;
 							numElements++;
-							temp = UsableQueue.poll();
+							temp = temp.poll();
 							if(UsableQueue.isEmpty()) {
 								isValid = false;
 								return isValid;
