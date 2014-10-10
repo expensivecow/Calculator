@@ -19,8 +19,7 @@ public class MainActivity extends ActionBarActivity {
 	TextView display, displayarray, displaynumber, displayoperator;
 	String result;
 	String negOperator = "_", numDivider = "|", plusOperator = "+", subOperator = "-", mulOperator = "x", divOperator = "/", numOne = "1", numTwo = "2", numThree = "3", numFour = "4", numZero = "0", numFive = "5", numSix = "6", numSeven = "7", numEight = "8", numNine = "9", equalOperator = "=", decimalOperator = ".";
-	private int numOfDividers = 0;
-	
+
 	Queue<String> DisplayList;	//using a linked blocking queue b/c its unbound + FIFO
 	Queue<String> NumberList; //used to hold all numbers + numdividers
 	Queue<String> OperatorList; //used to hold all operands
@@ -136,13 +135,13 @@ public class MainActivity extends ActionBarActivity {
 		LinkedBlockingQueue<String> UsableQueue = new LinkedBlockingQueue<String>();
 		
 		int decimalcount;
+		int numElements;
 		boolean isValid = true;
 		
 		String temp = null; //default is null
 		//if NumberList is empty, return true (no numbers is still considered valid; no syntax errors)
 		if(NumberList.isEmpty()) {
 			isValid = true;
-			return isValid;
 		} else {
 			//Copy values to another queue so we can dissect it
 			while(NumberList.peek() != null) {
@@ -159,49 +158,58 @@ public class MainActivity extends ActionBarActivity {
 			//if beginning element is a "|", then that means an operator was the first item pressed, return false
 			if(UsableQueue.peek().equals(numDivider)) {
 				isValid = false;
-				return isValid;
 			} else {	
 				//Iterates through queue until an error is found
 				while(UsableQueue.isEmpty() == false) {
 					temp = UsableQueue.poll();
 					decimalcount = 0;
-					//checks base case of when the first item firstitem.equals(this)
+					numElements = 0;
+					//
 					if(temp.equals(negOperator)) {
 						if(UsableQueue.isEmpty() == true){
 							isValid = false;
-							return isValid;
 						} else if( (UsableQueue.peek() ).equals(numDivider)) {
 							isValid = false;
-							return isValid;
 						} else if(( UsableQueue.peek() ).equals(decimalOperator)) {
 							decimalcount++;
+							numElements++;
 							temp = UsableQueue.poll();
 							if(UsableQueue.isEmpty()) {
 								isValid = false;
-								return isValid;
 							}
 						}
 					} else if(temp.equals(decimalOperator)) {
 						decimalcount++;
+						numElements++;
 						if(UsableQueue.isEmpty() == true) {
 							isValid = false;
-							return isValid;
 						} else if((UsableQueue.peek()).equals(numDivider)) {
 							isValid = false;
-							return isValid;
 						}
-					} 
+					} else {
+						numElements++;
+						if(UsableQueue.isEmpty() == true){
+							isValid = true;
+						} else if((UsableQueue.peek()).equals(numDivider)) {
+							isValid = false;
+						}
+					}
 					while(UsableQueue.isEmpty() == false) {
 						temp = UsableQueue.poll();
 						if(temp.equals(numDivider)) {
 							decimalcount = 0;
+							numElements = 0;
 							break;
 						} else if(temp.equals(negOperator)) {
 							isValid = false;
 							return isValid;
 						} else if(temp.equals(decimalOperator)) {
 							decimalcount++;
+							numElements++;
+						} else {
+							numElements++;
 						}
+						
 						if(decimalcount > 1) {
 							isValid = false;
 							return isValid;
@@ -214,6 +222,17 @@ public class MainActivity extends ActionBarActivity {
 				return isValid;
 			}
 		}
+		return isValid;
+	}
+	
+	public Boolean isOpValid() {
+		//TODO: implement a validity check on OperatorList
+		return false;
+	}
+	
+	public Boolean isDispValid() {
+		//TODO: implement a validity check on DisplayList
+		return false;
 	}
 	
     @Override

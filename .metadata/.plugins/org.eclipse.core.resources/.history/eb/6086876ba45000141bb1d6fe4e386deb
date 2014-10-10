@@ -190,7 +190,14 @@ public class MainActivity extends ActionBarActivity {
 							isValid = false;
 							return isValid;
 						}
-					} 
+					} else {
+						if(UsableQueue.isEmpty() == true){
+							isValid = true;
+						} else if((UsableQueue.peek()).equals(numDivider)) {
+							isValid = false;
+							return isValid;
+						}
+					}
 					while(UsableQueue.isEmpty() == false) {
 						temp = UsableQueue.poll();
 						if(temp.equals(numDivider)) {
