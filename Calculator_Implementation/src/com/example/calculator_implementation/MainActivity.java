@@ -127,6 +127,27 @@ public class MainActivity extends ActionBarActivity {
 		return temp;
 	}
 	
+	
+	//TODO
+	//returns a translated version of numberlist in doubles
+	public Queue<Double> parseToDouble() {
+		Queue<Double> returnQueue = new LinkedBlockingQueue<Double>();
+		String parseString = "";
+		String temp;
+		Iterator<String> parse = NumberList.iterator();
+		while(parse.hasNext()) {
+			temp = parse.next();
+			if(temp.equals(numDivider)) {
+				returnQueue.add(Double.parseDouble(parseString));
+				parseString = "";
+			} else {
+				parseString += temp;
+			}
+		}
+		returnQueue.add(Double.parseDouble(parseString));
+		return returnQueue;
+	}
+	
 	/* Precondition: NumberList exists
 	 * Postcondition: Returns true or false whether the numberlist queue is syntax-correct
 	 */
@@ -215,6 +236,8 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 	}
+	
+	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -311,14 +334,19 @@ public class MainActivity extends ActionBarActivity {
        	}
        });
        
+       //TODO
        equal.setOnClickListener(new View.OnClickListener() {
        	
        	public void onClick(View v) {
        		Boolean numValid = isNumValid();
        		if(numValid == true) {
-       			display.setText("true");
+       			if(parseToDouble().isEmpty()) {
+       				display.setText("0");
+       			} else {
+       			    display.setText(parseToDouble().toString());
+       			}
        		} else if(numValid == false) {
-       			display.setText("false");
+       			display.setText("SYNTAX ERROR");
        		}
        	}
        });
