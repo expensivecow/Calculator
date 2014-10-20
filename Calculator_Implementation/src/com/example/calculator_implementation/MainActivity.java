@@ -127,8 +127,6 @@ public class MainActivity extends ActionBarActivity {
 		return temp;
 	}
 	
-	
-	//TODO
 	//returns a translated version of numberlist in doubles
 	public Queue<Double> parseToDouble() {
 		Queue<Double> returnQueue = new LinkedBlockingQueue<Double>();
@@ -145,6 +143,154 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 		returnQueue.add(Double.parseDouble(parseString));
+		return returnQueue;
+	}
+	
+	//TODO
+	//evaluate numbers and operators to send out a result on the calculator
+	public double evaluate(Queue<Double> numbers) {
+		if(numbers.size() == 1) {
+			return numbers.poll();
+		} else {
+			numbers = doDivision(numbers);
+			numbers = doMultiplication(numbers);
+			numbers = doAdd(numbers);
+			numbers = doSub(numbers);
+			if(numbers.isEmpty()) {
+				return 0;
+			}
+			return numbers.poll();
+		}
+		//return 0;
+	}
+	
+	public Queue<Double> doDivision(Queue<Double> numbers) {
+		Queue<Double> returnQueue = new LinkedBlockingQueue<Double>();
+		Queue<String> returnOperators = new LinkedBlockingQueue<String>();
+		String temp;
+		
+		while(OperatorList.peek() != null) {
+			Double simplifyNum;
+			temp = OperatorList.poll();
+			if(temp.equals(divOperator)) {
+				simplifyNum = numbers.poll();
+				simplifyNum /= numbers.poll();
+				numbers = addToFront(numbers, simplifyNum);
+			} else {
+				numbers.add(numbers.poll());
+				returnOperators.add(temp);
+			}
+		}
+		if(numbers.size() > 1) {
+			numbers.add(numbers.poll());
+		}
+		OperatorList = returnOperators;
+		return numbers;
+	}
+	
+	public Queue<Double> doMultiply(Queue<Double> numbers) {
+		Queue<Double> returnQueue = new LinkedBlockingQueue<Double>();
+		Queue<String> returnOperators = new LinkedBlockingQueue<String>();
+		String temp;
+		
+		while(OperatorList.peek() != null) {
+			Double simplifyNum;
+			temp = OperatorList.poll();
+			if(temp.equals(mulOperator)) {
+				simplifyNum = numbers.poll();
+				simplifyNum *= numbers.poll();
+				numbers = addToFront(numbers, simplifyNum);
+			} else {
+				numbers.add(numbers.poll());
+				returnOperators.add(temp);
+			}
+		}
+		if(numbers.size() > 1) {
+			numbers.add(numbers.poll());
+		}
+		OperatorList = returnOperators;
+		return numbers;
+	}
+	
+	public Queue<Double> doAdd(Queue<Double> numbers) {
+		Queue<Double> returnQueue = new LinkedBlockingQueue<Double>();
+		Queue<String> returnOperators = new LinkedBlockingQueue<String>();
+		String temp;
+		
+		while(OperatorList.peek() != null) {
+			Double simplifyNum;
+			temp = OperatorList.poll();
+			if(temp.equals(plusOperator)) {
+				simplifyNum = numbers.poll();
+				simplifyNum += numbers.poll();
+				numbers = addToFront(numbers, simplifyNum);
+			} else {
+				numbers.add(numbers.poll());
+				returnOperators.add(temp);
+			}
+		}
+		if(numbers.size() > 1) {
+			numbers.add(numbers.poll());
+		}
+		OperatorList = returnOperators;
+		return numbers;
+	}
+	
+	public Queue<Double> doSub(Queue<Double> numbers) {
+		Queue<Double> returnQueue = new LinkedBlockingQueue<Double>();
+		Queue<String> returnOperators = new LinkedBlockingQueue<String>();
+		String temp;
+		
+		while(OperatorList.peek() != null) {
+			Double simplifyNum;
+			temp = OperatorList.poll();
+			if(temp.equals(subOperator)) {
+				simplifyNum = numbers.poll();
+				simplifyNum -= numbers.poll();
+				numbers = addToFront(numbers, simplifyNum);
+			} else {
+				numbers.add(numbers.poll());
+				returnOperators.add(temp);
+			}
+		}
+		if(numbers.size() > 1) {
+			numbers.add(numbers.poll());
+		}
+		OperatorList = returnOperators;
+		return numbers;
+	}
+	
+	public Queue<Double> addToFront(Queue<Double> numbers, Double addnum) {
+		Queue<Double> returnQueue = new LinkedBlockingQueue<Double>();
+
+		returnQueue.add(addnum);
+		Iterator<Double> iterate = numbers.iterator();
+		while(iterate.hasNext()) {
+			returnQueue.add(iterate.next());
+		}
+		return returnQueue;
+	}
+	
+	public Queue<Double> doMultiplication(Queue<Double> numbers) {
+		Queue<Double> returnQueue = new LinkedBlockingQueue<Double>();
+		Queue<String> returnOperators = new LinkedBlockingQueue<String>();
+		Double simplifyNum = 0.0;
+		String temp;
+		
+		while(OperatorList.peek() != null) {
+			temp = OperatorList.poll();
+			if(temp.equals(mulOperator)) {
+				simplifyNum = numbers.poll();
+				simplifyNum *= numbers.poll();
+				returnQueue.add(simplifyNum);
+				numbers.add(simplifyNum);
+			} else {
+				returnQueue.add(numbers.poll());
+				returnQueue.add(numbers.poll());
+				returnOperators.add(temp);
+			}
+		}
+		OperatorList = returnOperators;
 		return returnQueue;
 	}
 	
@@ -343,7 +489,9 @@ public class MainActivity extends ActionBarActivity {
        			if(parseToDouble().isEmpty()) {
        				display.setText("0");
        			} else {
-       			    display.setText(parseToDouble().toString());
+       			    display.setText(Double.toString(evaluate(parseToDouble())));
+       	    		Display_Operators(OperatorList);
+       	    		Display_NumItems(NumberList);
        			}
        		} else if(numValid == false) {
        			display.setText("SYNTAX ERROR");
