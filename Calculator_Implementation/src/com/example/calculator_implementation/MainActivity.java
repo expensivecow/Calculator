@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import java.util.Iterator;
 import java.util.Queue;
-import java.util.Stack;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class MainActivity extends ActionBarActivity {
@@ -18,8 +17,7 @@ public class MainActivity extends ActionBarActivity {
 	Button add, sub, mul, div, zero, one, two, three, four, five, six, seven, eight, nine, negative, decimal, clear, delete, equal;
 	TextView display, displayarray, displaynumber, displayoperator;
 	String result;
-	String negOperator = "_", numDivider = "|", plusOperator = "+", subOperator = "-", mulOperator = "x", divOperator = "/", numOne = "1", numTwo = "2", numThree = "3", numFour = "4", numZero = "0", numFive = "5", numSix = "6", numSeven = "7", numEight = "8", numNine = "9", equalOperator = "=", decimalOperator = ".";
-	private int numOfDividers = 0;
+	String negOperator = "-", numDivider = "|", plusOperator = "+", subOperator = "-", mulOperator = "x", divOperator = "/", numOne = "1", numTwo = "2", numThree = "3", numFour = "4", numZero = "0", numFive = "5", numSix = "6", numSeven = "7", numEight = "8", numNine = "9", equalOperator = "=", decimalOperator = ".";
 	
 	Queue<String> DisplayList;	//using a linked blocking queue b/c its unbound + FIFO
 	Queue<String> NumberList; //used to hold all numbers + numdividers
@@ -132,6 +130,9 @@ public class MainActivity extends ActionBarActivity {
 		Queue<Double> returnQueue = new LinkedBlockingQueue<Double>();
 		String parseString = "";
 		String temp;
+		if(NumberList.isEmpty()) {
+			return returnQueue;
+		}
 		Iterator<String> parse = NumberList.iterator();
 		while(parse.hasNext()) {
 			temp = parse.next();
@@ -164,8 +165,18 @@ public class MainActivity extends ActionBarActivity {
 		//return 0;
 	}
 	
-	public Queue<Double> doDivision(Queue<Double> numbers) {
+	public Queue<Double> addToFront(Queue<Double> numbers, Double addnum) {
 		Queue<Double> returnQueue = new LinkedBlockingQueue<Double>();
+
+		returnQueue.add(addnum);
+		Iterator<Double> iterate = numbers.iterator();
+		while(iterate.hasNext()) {
+			returnQueue.add(iterate.next());
+		}
+		return returnQueue;
+	}
+	
+	public Queue<Double> doDivision(Queue<Double> numbers) {
 		Queue<String> returnOperators = new LinkedBlockingQueue<String>();
 		String temp;
 		
@@ -184,12 +195,12 @@ public class MainActivity extends ActionBarActivity {
 		if(numbers.size() > 1) {
 			numbers.add(numbers.poll());
 		}
+		
 		OperatorList = returnOperators;
 		return numbers;
 	}
 	
 	public Queue<Double> doMultiply(Queue<Double> numbers) {
-		Queue<Double> returnQueue = new LinkedBlockingQueue<Double>();
 		Queue<String> returnOperators = new LinkedBlockingQueue<String>();
 		String temp;
 		
@@ -213,7 +224,6 @@ public class MainActivity extends ActionBarActivity {
 	}
 	
 	public Queue<Double> doAdd(Queue<Double> numbers) {
-		Queue<Double> returnQueue = new LinkedBlockingQueue<Double>();
 		Queue<String> returnOperators = new LinkedBlockingQueue<String>();
 		String temp;
 		
@@ -237,7 +247,6 @@ public class MainActivity extends ActionBarActivity {
 	}
 	
 	public Queue<Double> doSub(Queue<Double> numbers) {
-		Queue<Double> returnQueue = new LinkedBlockingQueue<Double>();
 		Queue<String> returnOperators = new LinkedBlockingQueue<String>();
 		String temp;
 		
@@ -260,38 +269,27 @@ public class MainActivity extends ActionBarActivity {
 		return numbers;
 	}
 	
-	public Queue<Double> addToFront(Queue<Double> numbers, Double addnum) {
-		Queue<Double> returnQueue = new LinkedBlockingQueue<Double>();
-
-		returnQueue.add(addnum);
-		Iterator<Double> iterate = numbers.iterator();
-		while(iterate.hasNext()) {
-			returnQueue.add(iterate.next());
-		}
-		return returnQueue;
-	}
-	
 	public Queue<Double> doMultiplication(Queue<Double> numbers) {
-		Queue<Double> returnQueue = new LinkedBlockingQueue<Double>();
 		Queue<String> returnOperators = new LinkedBlockingQueue<String>();
-		Double simplifyNum = 0.0;
 		String temp;
 		
 		while(OperatorList.peek() != null) {
+			Double simplifyNum;
 			temp = OperatorList.poll();
 			if(temp.equals(mulOperator)) {
 				simplifyNum = numbers.poll();
 				simplifyNum *= numbers.poll();
-				returnQueue.add(simplifyNum);
-				numbers.add(simplifyNum);
+				numbers = addToFront(numbers, simplifyNum);
 			} else {
-				returnQueue.add(numbers.poll());
-				returnQueue.add(numbers.poll());
+				numbers.add(numbers.poll());
 				returnOperators.add(temp);
 			}
 		}
+		if(numbers.size() > 1) {
+			numbers.add(numbers.poll());
+		}
 		OperatorList = returnOperators;
-		return returnQueue;
+		return numbers;
 	}
 	
 	/* Precondition: NumberList exists
