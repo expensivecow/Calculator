@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -295,19 +297,17 @@ public class MainActivity extends ActionBarActivity {
 	/* Precondition: NumberList exists
 	 * Postcondition: Returns true or false whether the numberlist queue is syntax-correct
 	 */
-	public boolean isNumValid() {
+	public int isNumValid() {
 		//add a queue that will be used to restore the queue later on
 		LinkedBlockingQueue<String> RestoringQueue = new LinkedBlockingQueue<String>();
 		LinkedBlockingQueue<String> UsableQueue = new LinkedBlockingQueue<String>();
 		
-		int decimalcount;
-		boolean isValid = true;
+		int decimalcount = 0;
 		
 		String temp = null; //default is null
 		//if NumberList is empty, return true (no numbers is still considered valid; no syntax errors)
 		if(NumberList.isEmpty()) {
-			isValid = true;
-			return isValid;
+			return 0;
 		} else {
 			//Copy values to another queue so we can dissect it
 			while(NumberList.peek() != null) {
@@ -323,8 +323,7 @@ public class MainActivity extends ActionBarActivity {
 			
 			//if beginning element is a "|", then that means an operator was the first item pressed, return false
 			if(UsableQueue.peek().equals(numDivider)) {
-				isValid = false;
-				return isValid;
+				return 1;
 			} else {	
 				//Iterates through queue until an error is found
 				while(UsableQueue.isEmpty() == false) {
@@ -333,27 +332,22 @@ public class MainActivity extends ActionBarActivity {
 					//checks base case of when the first item firstitem.equals(this)
 					if(temp.equals(negOperator)) {
 						if(UsableQueue.isEmpty() == true){
-							isValid = false;
-							return isValid;
-						} else if( (UsableQueue.peek() ).equals(numDivider)) {
-							isValid = false;
-							return isValid;
-						} else if(( UsableQueue.peek() ).equals(decimalOperator)) {
+							return 2;
+						} else if((UsableQueue.peek()).equals(numDivider)) {
+							return 2;
+						} else if((UsableQueue.peek()).equals(decimalOperator)) {
 							decimalcount++;
 							temp = UsableQueue.poll();
 							if(UsableQueue.isEmpty()) {
-								isValid = false;
-								return isValid;
+								return 2;
 							}
 						}
 					} else if(temp.equals(decimalOperator)) {
 						decimalcount++;
 						if(UsableQueue.isEmpty() == true) {
-							isValid = false;
-							return isValid;
+							return 3;
 						} else if((UsableQueue.peek()).equals(numDivider)) {
-							isValid = false;
-							return isValid;
+							return 3;
 						}
 					} 
 					while(UsableQueue.isEmpty() == false) {
@@ -362,23 +356,21 @@ public class MainActivity extends ActionBarActivity {
 							decimalcount = 0;
 							break;
 						} else if(temp.equals(negOperator)) {
-							isValid = false;
-							return isValid;
+							return 2;
 						} else if(temp.equals(decimalOperator)) {
 							decimalcount++;
 						}
 						if(decimalcount > 1) {
-							isValid = false;
-							return isValid;
+							return 5;
 						}
 					}
 				}
 				if(temp.equals(numDivider)) {
-					isValid = false;
+					return 1;
 				}
-				return isValid;
 			}
 		}
+		return 0; //return 0 by default
 	}
 	
 	
@@ -386,7 +378,12 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);       
+        
         setContentView(R.layout.activity_main);
+        //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
   
         //Making my buttons and declaring my display
         display = (TextView) findViewById(R.id.DisplayResult);
@@ -479,11 +476,18 @@ public class MainActivity extends ActionBarActivity {
        });
        
        //TODO
+       /* ERROR CHECKING: 
+        * int = 0  --> Everything is Fine!
+        *     = 1  --> Operator Syntax Error
+        *     = 2  --> Negative Syntax Error
+        *     = 3  --> Decimal Syntax Error
+        *     = 4  --> Double Negative Error
+        *     = 5  --> Double Decimal Error
+        */
        equal.setOnClickListener(new View.OnClickListener() {
        	
        	public void onClick(View v) {
-       		Boolean numValid = isNumValid();
-       		if(numValid == true) {
+       		if(isNumValid() == 0) {
        			if(parseToDouble().isEmpty()) {
        				display.setText("0");
        			} else {
@@ -491,8 +495,16 @@ public class MainActivity extends ActionBarActivity {
        	    		Display_Operators(OperatorList);
        	    		Display_NumItems(NumberList);
        			}
-       		} else if(numValid == false) {
-       			display.setText("SYNTAX ERROR");
+       		} else if(isNumValid() == 1) {
+       			display.setText("Operator Syntax Error");
+       		} else if(isNumValid() == 2) {
+       			display.setText("Negative Syntax Error");
+       		} else if(isNumValid() == 3) {
+       			display.setText("Decimal Syntax Error");
+       		} else if(isNumValid() == 4) {
+       			display.setText("Double Negative Syntax Error");
+       		} else {
+       			display.setText("Double Decimal Error");
        		}
        	}
        });

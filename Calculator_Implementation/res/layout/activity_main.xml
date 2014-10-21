@@ -50,8 +50,8 @@
         android:id="@+id/bMul"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignBaseline="@+id/bAdd"
         android:layout_alignBottom="@+id/bAdd"
+        android:layout_alignTop="@+id/bAdd"
         android:layout_toLeftOf="@+id/bAdd"
         android:text="@string/muloperator" />
 
@@ -155,9 +155,6 @@
         android:layout_marginTop="32dp"
         android:text="@string/DisplayArray"
         android:textColor="#FF0000" />
-    TODO
-    
-
     <Button
         android:id="@+id/bDecimal"
         android:layout_width="50dp"
