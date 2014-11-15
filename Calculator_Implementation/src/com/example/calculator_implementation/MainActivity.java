@@ -410,13 +410,6 @@ public class MainActivity extends ActionBarActivity {
         clear = (Button) findViewById(R.id.bClear);
         delete = (Button) findViewById(R.id.bDel);
 
-        
-       /* Method: Add
-        * Precondition: None
-        * Postcondition: adds the string "+" to Operatorlist and displaylist, as well
-        * as the string "|" to numberList to indicate a number parse. Then
-        * updates list to show number has been inputed on display.
-        */
        add.setOnClickListener(new View.OnClickListener() {
         	
         	public void onClick(View v) {
@@ -426,13 +419,7 @@ public class MainActivity extends ActionBarActivity {
         		Update_All();
         	}
         });
-        
-       /* Method: Sub
-        * Precondition: None
-        * Postcondition: adds the string "-" to Operatorlist and displaylist, as well
-        * as the string "|" to numberList to indicate a number parse. Then
-        * updates list to show number has been inputed on display.
-        */
+       
        sub.setOnClickListener(new View.OnClickListener() {
         	
         	public void onClick(View v) {
@@ -442,13 +429,7 @@ public class MainActivity extends ActionBarActivity {
         		Update_All();
         	}
         });
-    
-       /* Method: Mul
-        * Precondition: None
-        * Postcondition: adds the string "x" to Operatorlist and displaylist, as well
-        * as the string "|" to numberList to indicate a number parse. Then
-        * updates list to show number has been inputed on display.
-        */
+
        mul.setOnClickListener(new View.OnClickListener() {
        	
        	public void onClick(View v) {
@@ -459,12 +440,6 @@ public class MainActivity extends ActionBarActivity {
        	}
        });
        
-       /* Method: Div
-        * Precondition: None
-        * Postcondition: adds the string "/" to Operatorlist and displaylist, as well
-        * as the string "|" to numberList to indicate a number parse. Then
-        * updates list to show number has been inputed on display.
-        */
        div.setOnClickListener(new View.OnClickListener() {
        	
        	public void onClick(View v) {
@@ -475,7 +450,6 @@ public class MainActivity extends ActionBarActivity {
        	}
        });
        
-       //TODO
        /* ERROR CHECKING: 
         * int = 0  --> Everything is Fine!
         *     = 1  --> Operator Syntax Error
@@ -509,11 +483,6 @@ public class MainActivity extends ActionBarActivity {
        	}
        });
        
-       /* Method: Negative
-        * Precondition: None
-        * Postcondition: adds the string "_" to numberlist and "-" to the displaylist. Then
-        * updates list to show number has been inputed on display.
-        */
       negative.setOnClickListener(new View.OnClickListener() {
        	
        	public void onClick(View v) {
@@ -523,11 +492,6 @@ public class MainActivity extends ActionBarActivity {
        	}
        });
       
-      /* Method: Decimal
-       * Precondition: None
-       * Postcondition: adds the string "." to numberlist and displaylist. Then
-       * updates list to show number has been inputed on display.
-       */
       decimal.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
@@ -537,11 +501,6 @@ public class MainActivity extends ActionBarActivity {
       	}
       });
       
-      /* Method: Zero
-       * Precondition: None
-       * Postcondition: adds the string "0" to numberlist and displaylist. Then
-       * updates list to show number has been inputed on display.
-       */
       zero.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
@@ -551,11 +510,6 @@ public class MainActivity extends ActionBarActivity {
       	}
       });
       
-      /* Method: One
-       * Precondition: None
-       * Postcondition: adds the string "1" to numberlist and displaylist. Then
-       * updates list to show number has been inputed on display.
-       */
       one.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
@@ -564,12 +518,7 @@ public class MainActivity extends ActionBarActivity {
     		Update_All();
       	}
       });
-      
-      /* Method: Two
-       * Precondition: None
-       * Postcondition: adds the string "2" to numberlist and displaylist. Then
-       * updates list to show number has been inputed on display.
-       */
+
       two.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
@@ -578,12 +527,7 @@ public class MainActivity extends ActionBarActivity {
     		Update_All();
       	}
       });
-      
-      /* Method: Three
-       * Precondition: None
-       * Postcondition: adds the string "3" to numberlist and displaylist. Then
-       * updates list to show number has been inputed on display.
-       */
+
       three.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
@@ -592,12 +536,7 @@ public class MainActivity extends ActionBarActivity {
     		Update_All();
       	}
       });
-      
-      /* Method: Four
-       * Precondition: None
-       * Postcondition: adds the string "4" to numberlist and displaylist. Then
-       * updates list to show number has been inputed on display.
-       */
+
       four.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
@@ -606,12 +545,7 @@ public class MainActivity extends ActionBarActivity {
     		Update_All();
       	}
       });
-      
-      /* Method: Five
-       * Precondition: None
-       * Postcondition: adds the string "5" to numberlist and displaylist. Then
-       * updates list to show number has been inputed on display.
-       */
+
       five.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
@@ -620,12 +554,7 @@ public class MainActivity extends ActionBarActivity {
     		Update_All();
       	}
       });
-      
-      /* Method: Six
-       * Precondition: None
-       * Postcondition: adds the string "6" to numberlist and displaylist. Then
-       * updates list to show number has been inputed on display.
-       */
+
       six.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
@@ -635,11 +564,6 @@ public class MainActivity extends ActionBarActivity {
       	}
       });
       
-      /* Method: Seven
-       * Precondition: None
-       * Postcondition: adds the string "7" to numberlist and displaylist. Then
-       * updates list to show number has been inputed on display.
-       */
       seven.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
@@ -649,11 +573,6 @@ public class MainActivity extends ActionBarActivity {
       	}
       });
       
-      /* Method: Eight
-       * Precondition: None
-       * Postcondition: adds the string "8" to numberlist and displaylist. Then
-       * updates list to show number has been inputed on display.
-       */
       eight.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
@@ -662,12 +581,7 @@ public class MainActivity extends ActionBarActivity {
     		Update_All();
       	}
       });
-      
-      /* Method: Nine
-       * Precondition: None
-       * Postcondition: adds the string "9" to numberlist and displaylist. Then
-       * updates list to show number has been inputed on display.
-       */
+
       nine.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
@@ -677,11 +591,6 @@ public class MainActivity extends ActionBarActivity {
       	}
       });
       
-  	/* Method: Clear
-  	 * Precondition: NumberList, DisplayList exist as queues
-  	 * Postcondition: NumberList DisplayList are cleared and Display is shown to look 'reset'
-  	 * by clearing all data in the queue and updating the display
-  	 */
       clear.setOnClickListener(new View.OnClickListener() {
       	
       	public void onClick(View v) {
@@ -695,12 +604,6 @@ public class MainActivity extends ActionBarActivity {
       
       delete.setOnClickListener(new View.OnClickListener() {
       	
-    	  /* Method: Delete
-    	   * Precondition: Three queues which store strings exist (display, operator, number)
-    	   * Postcondition: If last element in the queue holding all items is an operator,
-    	   * delete end element in all queues (display, operator, number). Else, delete the
-    	   * end element of display and number queue.
-    	   */
       	public void onClick(View v) {
       		
       		if(DisplayList.isEmpty() == false) {
